@@ -1,7 +1,7 @@
 # json-generator
 Input data using admin forms, then output the saved data in JSON format.
 
-This is a simplified module to promote the importance of hook_menu, hook_form, variable_set, and variable_get, and the ease of outputting Drupal data in JSON format. Security checks and other details are intentionally omitted to focus on the core concepts and the bigger picture of custom module development.
+This is a simplified module to promote the importance of hook_menu, hook_form, system_settings_form, variable_set, and variable_get, and the ease of outputting Drupal data in JSON format. Security checks and other details are intentionally omitted to focus on the core concepts and the bigger picture of custom module development.
 
 You could conveniently download the [zipped file](https://github.com/ranelpadon/json-generator/archive/master.zip) from [GitHub](https://github.com/ranelpadon/json-generator). Just rename the unzipped module folder to **json_generator** (note that underscores should be used instead of dashes) before using it to you Drupal site.
 

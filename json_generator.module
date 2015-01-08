@@ -1,0 +1,24 @@
+<?php
+
+
+/**
+ * Implements hook_menu().
+ */
+function json_generator_menu() {
+  $items = array();
+
+  // Tell Drupal to generate a form for 'admin/config/json_generator' URL.
+  // The form is defined in 'json_generator_admin_settings' function.
+  // The URL should be accessible only by those with
+  // 'administer site configuration' permission.
+  $items['admin/config/json_generator'] = array(
+    'title' => "JSON Generator Form",
+    'description' => 'Form for inputting custom texts.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('json_generator_admin_settings'),
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  return $items;
+}

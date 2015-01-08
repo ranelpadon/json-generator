@@ -8,15 +8,35 @@ function json_generator_menu() {
   $items = array();
 
   // Tell Drupal to generate a form for 'admin/config/json_generator' URL.
-  // The form is defined in 'json_generator_admin_settings' function.
+  // The form is defined in 'json_generator_form' function.
   // The URL should be accessible only by those with
   // 'administer site configuration' permission.
   $items['admin/config/json_generator'] = array(
     'title' => "JSON Generator Form",
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('json_generator_admin_settings'),
+    'page arguments' => array('json_generator_form'),
     'access arguments' => array('administer site configuration'),
     'type' => MENU_NORMAL_ITEM,
+  );
+
+  // Tell Drupal to generate a 'json_generator' URL for outputting JSON.
+  // If you have http://www.mysite.com site URL, this JSON page is in:
+  // http://www.mysite.com/json_generator
+  // Accessing this URL will give you something like this JSON data:
+  // {"my_custom_texts" : "The texts that I have inputted in the custom form."}
+  $items['json_generator'] = array(
+    'page callback' => '_get_custom_texts',
+
+    // This property makes the page callback to automatically call also
+    // the drupal_json_output() using the returned array of
+    // _get_custom_texts, which then calls the drupal_json_encode.
+    // It will convert the passed array to JSON object,
+    // plus the required HTML headers.
+    // Very handy indeed.
+    'delivery callback' => 'drupal_json_output',
+
+    // Grant access to everyone (anonymous, editors, and admin).
+    'access arguments' => array('access content'),
   );
 
   return $items;
@@ -26,13 +46,16 @@ function json_generator_menu() {
 /**
  * Implements hook_form().
  */
-function json_generator_admin_settings($form, &$form_state) {
+function json_generator_form($form, &$form_state) {
   $form = array();
 
   // Create a 'json_generator' form labeled as 'Custom Text'
   // containing a text area for inputting custom texts.
   // It has 5 rows and every time you reload that page the value
-  // should be set to the previously entered one,
+  // should be set to the previously entered one.
+  // variable_get/variable_set are some of the handy functions to Set and Get
+  // custom database values without creating a new table.
+  // The values are actually saved in Drupal's built-in 'Variable' table.
   $form['json_generator'] = array(
     '#type' => 'textarea',
     '#title' => t('Custom Text'),
@@ -48,4 +71,20 @@ function json_generator_admin_settings($form, &$form_state) {
   $form = system_settings_form($form);
 
   return $form;
+}
+
+
+/**
+ * Function callback for 'json_generator' URL.
+ */
+function _get_custom_texts() {
+  // Access the previously saved 'json_generator' data in the 'Variable' table.
+  // Note that $data could be set by any value from the database,
+  // using Drupal's Database API or EntityFieldQuery API for data retrieval.
+  $data = variable_get('json_generator');
+
+  // This associative array will be passed to drupal_json_output()
+  // which will also call drupal_json_encode() and
+  // return the JSON representation.
+  return array('my_custom_texts' => $data);
 }

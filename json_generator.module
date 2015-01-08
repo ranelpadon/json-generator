@@ -13,7 +13,6 @@ function json_generator_menu() {
   // 'administer site configuration' permission.
   $items['admin/config/json_generator'] = array(
     'title' => "JSON Generator Form",
-    'description' => 'Form for inputting custom texts.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('json_generator_admin_settings'),
     'access arguments' => array('administer site configuration'),
@@ -21,4 +20,32 @@ function json_generator_menu() {
   );
 
   return $items;
+}
+
+
+/**
+ * Implements hook_form().
+ */
+function json_generator_admin_settings($form, &$form_state) {
+  $form = array();
+
+  // Create a 'json_generator' form labeled as 'Custom Text'
+  // containing a text area for inputting custom texts.
+  // It has 5 rows and every time you reload that page the value
+  // should be set to the previously entered one,
+  $form['json_generator'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Custom Text'),
+    '#rows' => 5,
+    '#default_value' => variable_get('json_generator'),
+  );
+
+  // Create a system-generated submit form. This is equivalent to:
+  // $form['#submit'][] = 'system_settings_form_submit';
+  // The advantage of this 'submit' callback is the automatic execution of
+  // variable_set('json_generator') and auto-display of message
+  // after saving the form.
+  $form = system_settings_form($form);
+
+  return $form;
 }

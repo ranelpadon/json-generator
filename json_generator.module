@@ -35,7 +35,8 @@ function json_generator_menu() {
     // Very handy indeed.
     'delivery callback' => 'drupal_json_output',
 
-    // Grant access to everyone (anonymous, editors, and admin).
+    // Grant access to everyone (anonymous, editors, and admin) or
+    // generally those people who has 'access content'.
     'access arguments' => array('access content'),
   );
 

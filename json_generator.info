@@ -1,3 +1,4 @@
 name = JSON Generator
 description = Outputs the saved data in admin forms to JSON format.
 core = 7.x
+configure = admin/config/json_generator
